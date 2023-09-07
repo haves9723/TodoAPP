@@ -11,6 +11,7 @@ export default function App() {
   const [taskItem, setTaskItem] = useState([]);
   const [selectedTask, setSelectedTask] = useState();
   
+
   const toggleInput = () => {
     setInputVisible(!inputVisible);
   }
@@ -30,6 +31,7 @@ export default function App() {
           id: Math.random(),
           text: taskText,
           completed: false,
+          subTaskList: [{id: 1, text: 'hello'}, {id: 2, text: 'new'}]
         }
         setTaskItem([newTask, ...taskItem]);
         setTaskText(null);

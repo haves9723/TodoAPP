@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { FontAwesome } from '@expo/vector-icons';
+import SubTaskItem from './SubTaskItem';
 
 const TaskItem = ({ index, task, onUpdateTask, isSelected, handleSelectedTask }) => {
     return (
@@ -16,6 +17,17 @@ const TaskItem = ({ index, task, onUpdateTask, isSelected, handleSelectedTask })
                 </Pressable>
             }
             <Text style={styles.taskText}>{task.text}</Text>
+            <Text style={styles.taskText}>{task.subTaskList[0].text}</Text>
+            {   
+                task.subTaskList.map((item, index) => {
+                    return (
+                    <SubTaskItem
+                        index={index}
+                        subTask={item}>
+                    </SubTaskItem>
+                    )
+                })
+            }
         </Pressable>
     )
 }
