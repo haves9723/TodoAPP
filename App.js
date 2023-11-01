@@ -1,8 +1,8 @@
 import { Keyboard, Pressable, SafeAreaView, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TaskItem from './components/TaskItem';
-import SubTaskItem from './components/SubTaskItem';
+import { db, collection, getDocs } from "./firebaseConfig";
 
 export default function App() {
 
@@ -10,7 +10,17 @@ export default function App() {
   const [taskText, setTaskText] = useState('');
   const [taskItem, setTaskItem] = useState([]);
   const [selectedTask, setSelectedTask] = useState();
-  
+
+  const getTasks = async () => {
+    const querySnapshot = await getDocs(collection(db, "Task"));
+    const newData = querySnapshot.docs
+                  .map(doc => doc.data());
+    setTaskItem(newData);
+  };
+
+  useEffect(() => {
+    getTasks();
+  }, [])
 
   const toggleInput = () => {
     setInputVisible(!inputVisible);
@@ -31,7 +41,7 @@ export default function App() {
           id: Math.random(),
           text: taskText,
           completed: false,
-          subTaskList: [{id: 1, text: 'hello'}, {id: 2, text: 'new'}]
+          subTaskList: [{ id: 1, text: 'hello' }, { id: 2, text: 'new' }]
         }
         setTaskItem([newTask, ...taskItem]);
         setTaskText(null);
@@ -66,18 +76,27 @@ export default function App() {
           }
           {
             taskItem.map((item, index) => (
-                <View>
-                  <TaskItem
-                    key={index}
-                    task={item}
-                    onUpdateTask={done => updateTaskDone(index, done)}
-                    handleSelectedTask={handleSelectedTask}
-                    isSelected={selectedTask === item}>
-                  </TaskItem> 
-                </View>
+              <View>
+                <TaskItem
+                  key={index}
+                  task={item}
+                  onUpdateTask={done => updateTaskDone(index, done)}
+                  handleSelectedTask={handleSelectedTask}
+                  isSelected={selectedTask === item}>
+                </TaskItem>
+              </View>
             ))}
+          {/* {
+           taskItem.map((item, index) => (
+              <View>
+                <Text key={index} style={styles.title}>{item.text}</Text>
+                {console.log("hey",item)}
+              </View>
+            ))
+          } */}
+
         </View>
-        
+
         <Pressable
           onPress={toggleInput}
           style={styles.addContainer}

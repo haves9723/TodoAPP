@@ -1,11 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, Pressable } from 'react-native'
 import React from 'react'
+import { FontAwesome } from '@expo/vector-icons';
 
 const SubTaskItem = ({ index, subTask }) => {
-  console.log("sub",subTask);
   return (
     <View key={index} style={styles.container}>
-      <Text style={styles.subTaskText}>{subTask.text}</Text>
+      <Pressable>
+        <FontAwesome name="square" size={24} color="#555555" />
+      </Pressable>
+      <Text style={styles.subTaskText}>{subTask}</Text>
     </View>
   )
 }
